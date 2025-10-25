@@ -1,4 +1,4 @@
-# expense-tracker-appRun
+# Expense-Tracker-App
 Expense tracker application
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.8.

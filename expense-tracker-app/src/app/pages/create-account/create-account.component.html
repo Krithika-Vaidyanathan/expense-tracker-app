@@ -1,10 +1,10 @@
 <div class="create-account-container flex p-6 w-full h-full justify-center items-center">
-    <div class="container flex gap-8">
-        <div class="left-section flex flex-col flex-1 gap-y-4">
+    <div class="container flex gap-8 h-fit">
+        <div [formGroup]="accountForm" class="left-section flex flex-col flex-1 gap-y-4">
             <h1 class="text-[72px] font-bold">Take Control of <span class="text-customHsl-accent">Your Money</span></h1>
             <p class="text-2xl">Personal budgeting is the secret to financial freedom. Start your journey today.</p>
-            <input type="text" placeholder="Enter account name">
-            <button class="btn bg-customHsl-text text-white border-none w-fit text-[19px]">
+            <input formControlName="name" class="input-select" type="text" placeholder="Enter account name">
+            <button [disabled]="accountForm.invalid" (click)="createAccount()" class="btn bg-customHsl-text text-white border-none w-fit text-[19px]">
                 Create Account
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
                     fill="currentColor" aria-hidden="true" width="20">
