@@ -1,0 +1,10 @@
+<div class="bar-chart-container bg-white p-6 rounded-xl shadow-sm w-full">
+  <h3 class="text-2xl font-bold mb-4">Budget Utilization Overview</h3>
+  <div echarts [options]="barOptions" class="w-full h-[300px]"></div>
+
+  <div *ngIf="chartData?.meta as meta" class="mt-4 text-sm text-gray-700 flex flex-col gap-1">
+    <p><strong>Total Budgeted:</strong> {{ meta.totalBudgeted | currency:'$ ' }}</p>
+    <p><strong>Total Spent:</strong> {{ meta.totalSpent | currency:'$ ' }}</p>
+    <p><strong>Overall Utilization:</strong> {{ meta.overallUtil }}%</p>
+  </div>
+</div>

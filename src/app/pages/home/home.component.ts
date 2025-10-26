@@ -14,11 +14,12 @@ import { UiService } from '../../services/ui.service';
 import { Expense } from '../../interfaces/models/expense.interface';
 import { TableDataConfig } from '../../interfaces/models/table-data-config.interface';
 import { TableComponent } from '../../components/table/table.component';
+import { BarChartComponent } from '../../components/bar-chart/bar-chart.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormWrapperComponent, ReactiveFormsModule, BudgetCardComponent, TableComponent],
+  imports: [BarChartComponent , FormWrapperComponent, ReactiveFormsModule, BudgetCardComponent, TableComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -28,7 +29,14 @@ export class HomeComponent implements OnInit {
   budgetCards: BudgetCardConfig[] = [];
   expenseTableData: TableDataConfig[] = [];
 
-  constructor(private uiService: UiService, private router: Router, public userService: UserService, private budgetService: BudgetService, private expenseService: ExpenseService){}
+  chartPayload = {
+    labels: [] as string[],
+    values: [] as number[],
+    colors: [] as string[],
+    meta: { totalBudgeted: 0, totalSpent: 0, overallUtil: 0 }
+  };
+
+  constructor(private uiService: UiService, private router: Router, public userService: UserService, private budgetService: BudgetService, private expenseService: ExpenseService) { }
 
   budgetForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -46,10 +54,13 @@ export class HomeComponent implements OnInit {
     this.budgets = this.budgetService.getBudgets();
     this.buildBudgetCards(this.budgets);
 
-    this.budgetService.getBudgetData().subscribe({ 
+    this.updateChartData();
+
+    this.budgetService.getBudgetData().subscribe({
       next: (res: Budget[]) => {
         this.budgets = res;
         this.buildBudgetCards(this.budgets);
+        this.updateChartData(); // ✅ Refresh chart
       },
       error: (error: any) => {
         console.error(error)
@@ -70,6 +81,7 @@ export class HomeComponent implements OnInit {
     this.expenseService.getExpenseData().subscribe({
       next: (res: Expense[]) => {
         this.expenseTableData = this.expenseService.buildExpenseTable(res);
+        this.updateChartData(); // ✅ Refresh chart
       },
       error: (error: any) => {
         console.error(error)
@@ -87,6 +99,7 @@ export class HomeComponent implements OnInit {
     }
     this.budgetService.addBudget(budget);
     this.budgetForm.reset();
+    this.updateChartData(); // ✅ Refresh chart
   }
 
   addExpense() {
@@ -101,6 +114,50 @@ export class HomeComponent implements OnInit {
     // add expense
     this.expenseService.addExpense(expense);
     this.expenseForm.reset();
+    this.updateChartData(); // ✅ Refresh chart
+  }
+
+  updateChartData() {
+    const budgets = this.budgetService.getBudgets();
+    const expenses = this.expenseService.getExpenses();
+
+    const labels: string[] = [];
+    const values: number[] = [];
+    const colors: string[] = [];
+
+    let totalBudgeted = 0;
+    let totalSpent = 0;
+
+    budgets.forEach((budget) => {
+      const spentForBudget = expenses
+        .filter((e) => e.budgetCategory.id === budget.id)
+        .reduce((sum, e) => sum + e.amount, 0);
+
+      const utilization = budget.budget > 0
+        ? (spentForBudget / budget.budget) * 100
+        : 0;
+
+      labels.push(budget.name);
+      values.push(Math.round(utilization));
+      const colorMap: any = { red: '#dc2626', amber: '#d97706', blue: '#3b82f6' };
+      colors.push(colorMap[budget.color] || '#6b7280');
+
+      totalBudgeted += budget.budget;
+      totalSpent += spentForBudget;
+    });
+
+    const overallUtil = totalBudgeted > 0 ? Math.round((totalSpent / totalBudgeted) * 100) : 0;
+
+    this.chartPayload = {
+      labels,
+      values,
+      colors: colors,
+      meta: {
+        totalBudgeted,
+        totalSpent,
+        overallUtil
+      }
+    };
   }
 
   handleDelete(event: TableDataConfig) {
@@ -120,5 +177,4 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-
 }
