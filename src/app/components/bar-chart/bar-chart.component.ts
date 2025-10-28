@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
+import { ExportMenuComponent } from '../export-menu/export-menu.component';
 
 @Component({
   selector: 'app-bar-chart',
   standalone: true,
-  imports: [NgxEchartsModule, CommonModule],
+  imports: [NgxEchartsModule, CommonModule, ExportMenuComponent],
   templateUrl: './bar-chart.component.html',
   styleUrl: './bar-chart.component.scss',
   providers: [
@@ -18,6 +19,7 @@ import * as echarts from 'echarts';
 })
 export class BarChartComponent  implements OnChanges {
   barOptions: any;
+  @Input() exportData: any[] = [];
   @Input() chartData?: {
     labels: string[];
     values: number[];

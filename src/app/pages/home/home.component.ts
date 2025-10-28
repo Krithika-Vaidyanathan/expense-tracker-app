@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   budgets: Budget[] = [];
   budgetCards: BudgetCardConfig[] = [];
   expenseTableData: TableDataConfig[] = [];
+  expensesData: Expense[] = [];
 
   chartPayload = {
     labels: [] as string[],
@@ -76,10 +77,11 @@ export class HomeComponent implements OnInit {
       }
     })
 
-    const expenses = this.expenseService.getExpenses();
-    this.expenseTableData = this.expenseService.buildExpenseTable(expenses);
+    this.expensesData  = this.expenseService.getExpenses();
+    this.expenseTableData = this.expenseService.buildExpenseTable(this.expensesData);
     this.expenseService.getExpenseData().subscribe({
       next: (res: Expense[]) => {
+        this.expensesData = res;
         this.expenseTableData = this.expenseService.buildExpenseTable(res);
         this.updateChartData(); // ✅ Refresh chart
       },

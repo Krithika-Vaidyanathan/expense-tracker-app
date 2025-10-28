@@ -1,0 +1,15 @@
+.export-menu-container {
+  @apply relative flex justify-end items-center;
+
+  button {
+    @apply transition-all duration-150 ease-in-out;
+  }
+
+  .dropdown {
+    @apply absolute bg-white border border-gray-200 rounded-lg shadow-lg right-0 w-44 py-2 z-20;
+  }
+
+  .dropdown button {
+    @apply block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700;
+  }
+}

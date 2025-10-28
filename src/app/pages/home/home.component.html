@@ -75,7 +75,7 @@
 
     <!-- Show the chart only when there is at least one expense -->
     @if (chartPayload.meta.totalSpent && chartPayload.meta.totalSpent > 0) {
-    <app-bar-chart [chartData]="chartPayload"></app-bar-chart>
+    <app-bar-chart [chartData]="chartPayload" [exportData]="expensesData"></app-bar-chart>
     }
 
     @if (budgetCards && budgetCards.length > 0) {
