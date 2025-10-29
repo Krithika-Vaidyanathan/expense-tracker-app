@@ -1,6 +1,6 @@
 <div class="home-container px-10 flex flex-col gap-x-8">
 
-    <h1 class="text-7xl font-bold">Welcome back, 
+    <h1 class="text-7xl font-bold">Welcome back,
         <span class="text-customHsl-accent">{{userService.getUser().name}}</span>
     </h1>
 
@@ -20,11 +20,15 @@
                     <input formControlName="budget" type="number" class="input-select" placeholder="e.g $120">
                 </div>
 
-                <button [disabled]="budgetForm.invalid" (click)="addBudget()" class="btn bg-customHsl-text text-white border-none w-fit text-[19px]">
+                <button [disabled]="budgetForm.invalid" (click)="addBudget()"
+                    class="btn bg-customHsl-text text-white border-none w-fit text-[19px]">
                     Create Budget
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
-                    fill="currentColor" aria-hidden="true" width="20">
-                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        width="20">
+                        <path fill-rule="evenodd"
+                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </button>
             </div>
         </app-form-wrapper>
@@ -38,7 +42,7 @@
                         <label class="text-[19px] font-bold">Expense Name</label>
                         <input formControlName="name" type="text" class="input-select" placeholder="e.g Coffee">
                     </div>
-    
+
                     <div class="text-inputs flex flex-col gap-y-2">
                         <label class="text-[19px] font-bold">Amount</label>
                         <input formControlName="amount" type="number" class="input-select" placeholder="e.g $120">
@@ -50,28 +54,32 @@
 
                     <select formControlName="budgetCategoryId" class="input-select">
                         @for (item of budgetCategories; track $index) {
-                            <option value="{{item.id}}">{{item.name}}</option>
+                        <option value="{{item.id}}">{{item.name}}</option>
                         }
-                      
+
                         <!-- @for(){
                             <option>{{item.n}}</option>
                         } -->
 
                     </select>
                 </div>
-                
+
 
                 <button (click)="addExpense()" class="btn bg-customHsl-text text-white border-none w-fit text-[19px]">
                     Add Expense
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
-                    fill="currentColor" aria-hidden="true" width="20">
-                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        width="20">
+                        <path fill-rule="evenodd"
+                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </button>
             </div>
         </app-form-wrapper>
-        
-        
+    <app-popup [visible]="showPopup" [message]="popupMessage" (close)="showPopup = false">
+    </app-popup>
     </div>
+
 
     <!-- Show the chart only when there is at least one expense -->
     @if (chartPayload.meta.totalSpent && chartPayload.meta.totalSpent > 0) {
@@ -79,16 +87,16 @@
     }
 
     @if (budgetCards && budgetCards.length > 0) {
-        <h2 class="mini-title">Existing Budgets</h2>
-        <div class="flex w-full flex-wrap gap-4">
-            @for(item of budgetCards; track $index) {
-                <app-budget-card class="budget-card" [config]="item"></app-budget-card>
-            }
-        </div>
+    <h2 class="mini-title">Existing Budgets</h2>
+    <div class="flex w-full flex-wrap gap-4">
+        @for(item of budgetCards; track $index) {
+        <app-budget-card class="budget-card" [config]="item"></app-budget-card>
+        }
+    </div>
     }
 
     @if (expenseTableData && expenseTableData.length > 0) {
-        <h2 class="mini-title">Recent Expenses</h2>
-        <app-table (removeRow)="handleDelete($event)" [data]="expenseTableData"></app-table>
+    <h2 class="mini-title">Recent Expenses</h2>
+    <app-table (removeRow)="handleDelete($event)" [data]="expenseTableData"></app-table>
     }
 </div>

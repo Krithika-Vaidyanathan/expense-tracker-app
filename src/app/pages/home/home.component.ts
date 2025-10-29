@@ -15,11 +15,12 @@ import { Expense } from '../../interfaces/models/expense.interface';
 import { TableDataConfig } from '../../interfaces/models/table-data-config.interface';
 import { TableComponent } from '../../components/table/table.component';
 import { BarChartComponent } from '../../components/bar-chart/bar-chart.component';
+import { PopupComponent } from '../../components/popup/popup.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [BarChartComponent , FormWrapperComponent, ReactiveFormsModule, BudgetCardComponent, TableComponent],
+  imports: [PopupComponent, BarChartComponent , FormWrapperComponent, ReactiveFormsModule, BudgetCardComponent, TableComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -29,6 +30,8 @@ export class HomeComponent implements OnInit {
   budgetCards: BudgetCardConfig[] = [];
   expenseTableData: TableDataConfig[] = [];
   expensesData: Expense[] = [];
+  showPopup = false;
+  popupMessage = '';
 
   chartPayload = {
     labels: [] as string[],
@@ -113,10 +116,14 @@ export class HomeComponent implements OnInit {
       amount: parseFloat(this.expenseForm.value.amount),
       date: new Date()
     }
-    // add expense
-    this.expenseService.addExpense(expense);
-    this.expenseForm.reset();
-    this.updateChartData(); // ✅ Refresh chart
+    try {
+      this.expenseService.addExpense(expense);
+      this.expenseForm.reset();
+      this.updateChartData(); // ✅ Refresh chart
+    } catch (error: any) {
+      this.popupMessage = error.message;
+      this.showPopup = true;
+    }
   }
 
   updateChartData() {

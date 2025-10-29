@@ -37,4 +37,7 @@
     @if ( expenseTableData && expenseTableData.length > 0) {
         <app-table [data]="expenseTableData" (removeRow)="handleAction($event)"></app-table>
     }
+<app-popup [visible]="showPopup" [message]="popupMessage" (close)="showPopup = false">
+</app-popup>
+
 </div>

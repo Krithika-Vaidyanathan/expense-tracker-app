@@ -15,13 +15,25 @@ export class ExpenseService {
 
 
   addExpense(expense: Expense) {
-    try{  
+    try {
       const budget = this.budgetService.getBudgetById(expense.budgetCategory.id);
       const expenses = this.getExpenses();
+
+      const currentSpent = expenses
+        .filter(e => e.budgetCategory.id === budget.id)
+        .reduce((sum, e) => sum + e.amount, 0);
+
+      const newTotal = currentSpent + expense.amount;
+
+      // 🚨 Budget limit check
+      if (newTotal > budget.budget) {
+        throw new Error(`Expense exceeds the budget limit for "${budget.name}". Remaining budget: $${budget.budget - currentSpent}`);
+      }
+
       expenses.push(expense);
       this.setExpense(expenses);
       this.updateExpense(expenses, budget.id)
-    }catch(err: any){
+    } catch (err: any) {
       throw Error(err.message)
     }
   }

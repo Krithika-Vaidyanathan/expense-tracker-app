@@ -11,10 +11,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { BudgetCardComponent } from '../../components/budget-card/budget-card.component';
 import { FormWrapperComponent } from '../../components/form-wrapper/form-wrapper.component';
 import { TableComponent } from '../../components/table/table.component';
+import { PopupComponent } from '../../components/popup/popup.component';
 @Component({
   selector: 'app-budget-details',
   standalone: true,
-  imports: [ReactiveFormsModule, BudgetCardComponent, FormWrapperComponent, TableComponent],
+  imports: [PopupComponent, ReactiveFormsModule, BudgetCardComponent, FormWrapperComponent, TableComponent],
   templateUrl: './budget-details.component.html',
   styleUrl: './budget-details.component.scss'
 })
@@ -23,6 +24,9 @@ export class BudgetDetailsComponent implements OnInit {
   budgetCard!: BudgetCardConfig;
   expenseTableData: TableDataConfig[] =[];
   budgetId : string = '';
+  showPopup = false;
+  popupMessage = '';
+
 
   expenseForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -54,19 +58,24 @@ export class BudgetDetailsComponent implements OnInit {
 
   addExpense() {
     const category = this.budgetService.getBudgetCategoryById(this.budgetId);
-    const expense: Expense ={
+    const expense: Expense = {
       id: uuidv4(),
       name: this.expenseForm.value.name,
       budgetCategory: category,
       amount: parseInt(this.expenseForm.value.amount),
       date: new Date()
+    };
+
+    try {
+      this.expenseService.addExpense(expense);
+      this.expenseForm.reset();
+      this.initializeData();
+    } catch (error: any) {
+      this.popupMessage = error.message;
+      this.showPopup = true;
     }
-
-    this.expenseService.addExpense(expense);
-    this.expenseForm.reset();
-
-    this.initializeData();
   }
+
 
   initializeData() {
     const budget = this.budgetService.getBudgetById(this.budgetId);
