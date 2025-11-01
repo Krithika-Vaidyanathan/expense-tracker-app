@@ -1,12 +1,53 @@
-<div class="flex justify-between items-center mt-8 ml-8 px-2 sm:px-4 md:px-6">
-  <h3 class="text-2xl font-bold text-gray-900">Budget Utilization Overview</h3>
-  <!-- Export Menu aligned to title -->
-  <app-export-menu class="mr-8" [data]="exportData"></app-export-menu>
-</div>
-<div echarts [options]="barOptions" class="w-full h-[300px]"></div>
+<!-- ==========================
+     BAR CHART COMPONENT
+========================== -->
+<div
+  class="chart-header flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-6 sm:mt-8 px-4 sm:px-6 md:px-10"
+>
+  <!-- Title -->
+  <h3
+    class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-center sm:text-left w-full sm:w-auto"
+  >
+    Budget Utilization Overview
+  </h3>
 
-<div *ngIf="chartData?.meta as meta" class="mt-4 text-sm text-gray-700 flex flex-col gap-1">
-  <p><strong>Total Budgeted:</strong> {{ meta.totalBudgeted | currency:'$ ' }}</p>
-  <p><strong>Total Spent:</strong> {{ meta.totalSpent | currency:'$ ' }}</p>
-  <p><strong>Overall Utilization:</strong> {{ meta.overallUtil }}%</p>
+  <!-- Export Menu aligned to title -->
+  <div class="w-full sm:w-auto flex justify-center sm:justify-end">
+    <app-export-menu [data]="exportData"></app-export-menu>
+  </div>
+</div>
+
+<!-- Chart Section -->
+<div
+  echarts
+  [options]="barOptions"
+  class="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] mt-4 sm:mt-6 px-2 sm:px-6"
+>
+</div>
+
+<!-- Chart Summary Meta Info -->
+<div
+  *ngIf="chartData?.meta as meta"
+  class="chart-meta mt-6 px-4 sm:px-6 md:px-10 text-xs sm:text-sm md:text-base text-gray-700 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-x-8"
+>
+  <p>
+    <strong>Total Budgeted:</strong>
+    <span class="text-gray-800">{{ meta.totalBudgeted | currency:'$ ' }}</span>
+  </p>
+  <p>
+    <strong>Total Spent:</strong>
+    <span class="text-gray-800">{{ meta.totalSpent | currency:'$ ' }}</span>
+  </p>
+  <p>
+    <strong>Overall Utilization:</strong>
+    <span
+      [ngClass]="{
+        'text-green-600': meta.overallUtil < 80,
+        'text-orange-500': meta.overallUtil >= 80 && meta.overallUtil < 100,
+        'text-red-600': meta.overallUtil >= 100
+      }"
+    >
+      {{ meta.overallUtil }}%
+    </span>
+  </p>
 </div>

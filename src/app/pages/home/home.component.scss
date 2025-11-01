@@ -1,12 +1,11 @@
 @tailwind components;
 
-
-@layer components{
-    .mini-title {
-        @apply text-5xl my-8 font-bold
-    }
+@layer components {
+  .mini-title {
+    @apply text-4xl sm:text-5xl my-8 font-bold text-center md:text-left;
+  }
 }
 
-.budget-card{
-    width: calc((100%/3) - 16px);
+.budget-card {
+  @apply w-full sm:w-[48%] md:w-[31%];
 }

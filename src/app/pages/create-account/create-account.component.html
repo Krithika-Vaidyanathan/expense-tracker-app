@@ -1,20 +1,71 @@
-<div class="create-account-container flex p-6 w-full h-full justify-center items-center">
-    <div class="container flex gap-8 h-fit">
-        <div [formGroup]="accountForm" class="left-section flex flex-col flex-1 gap-y-4">
-            <h1 class="text-[72px] font-bold">Take Control of <span class="text-customHsl-accent">Your Money</span></h1>
-            <p class="text-2xl">Personal budgeting is the secret to financial freedom. Start your journey today.</p>
-            <input formControlName="name" class="input-select" type="text" placeholder="Enter account name">
-            <button [disabled]="accountForm.invalid" (click)="createAccount()" class="btn bg-customHsl-text text-white border-none w-fit text-[19px]">
-                Create Account
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
-                    fill="currentColor" aria-hidden="true" width="20">
-                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"></path>
-                </svg>
-            </button>
-        </div>
-        <div class="right-section flex-1">
-            <img src="assets/budgeting_set.jpg" alt="" srcset="">
+<!-- ==========================
+   CREATE ACCOUNT PAGE
+   ========================== -->
+<div class="create-account-container flex flex-col lg:flex-row w-full min-h-screen 
+            px-6 py-10 lg:py-0 justify-start lg:justify-center items-center">
 
-        </div>
+  <div class="container flex flex-col lg:flex-row items-center gap-8 h-fit w-full max-w-7xl mt-10 md:mt-0">
+
+    <!-- ==========================
+         LEFT SECTION (Form)
+    ========================== -->
+    <div [formGroup]="accountForm"
+         class="left-section flex flex-col flex-1 gap-y-4 text-center lg:text-left px-4 md:px-6">
+
+      <!-- Heading -->
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold leading-tight mt-4 md:mt-0">
+        Take Control of
+        <span class="text-customHsl-accent block lg:inline">Your Money</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+        Personal budgeting is the secret to financial freedom. Start your journey today.
+      </p>
+
+      <!-- Input & Button -->
+      <div class="flex flex-col sm:flex-row lg:flex-col gap-4 justify-center lg:justify-start items-center lg:items-start mt-4">
+
+        <!-- Account Name Input -->
+        <input
+          formControlName="name"
+          type="text"
+          placeholder="Enter account name"
+          class="input-select w-full sm:w-80 lg:w-full px-4 py-3 border border-gray-300 rounded-lg
+                 focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
+        />
+
+        <!-- Create Button -->
+        <button
+          [disabled]="accountForm.invalid"
+          (click)="createAccount()"
+          class="btn bg-customHsl-text text-white border-none w-full sm:w-auto 
+                 px-6 py-3 text-[17px] md:text-[19px] rounded-lg flex items-center justify-center gap-2
+                 hover:bg-opacity-90 disabled:opacity-50 transition-all">
+
+          Create Account
+          <!-- Plus Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg"
+               fill="currentColor" viewBox="0 0 24 24" width="20" height="20"
+               aria-hidden="true">
+            <path
+              d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 0 1 0-2h6V5a1 1 0 0 1 1-1Z" />
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+      </div>
     </div>
+
+    <!-- ==========================
+         RIGHT SECTION (Image)
+    ========================== -->
+    <div class="right-section flex-1 flex justify-center items-center mt-6 lg:mt-0 px-4">
+      <img
+        src="assets/budgeting_set.jpg"
+        alt="Illustration showing a Budget Plan"
+        class="w-64 sm:w-80 md:w-[420px] lg:w-[550px] h-auto rounded-2xl object-contain"
+      />
+    </div>
+
+  </div>
 </div>
