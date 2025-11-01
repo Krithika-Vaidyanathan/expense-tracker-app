@@ -95,6 +95,13 @@ export class HomeComponent implements OnInit {
   }
 
   addBudget() {
+    // ✅ 1️⃣ Check if user already has 10 budgets
+    if (this.budgetCards && this.budgetCards.length >= 10) {
+      this.popupMessage = 'You can create a maximum of 10 budgets only. Please delete an existing budget to add a new one.';
+      this.showPopup = true;
+      return; // stop execution
+    }
+
     const budget: Budget = {
       id: uuidv4(),
       name: this.budgetForm.value.name,

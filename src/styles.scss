@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.app-wrapper {
+  @apply min-h-screen flex flex-col;
+}
+
+main {
+  @apply flex-1; /* ensures main area takes up available space */
+}
+
+
 @layer components {
     .btn{
         @apply flex gap-x-2 border-2 items-center rounded-md

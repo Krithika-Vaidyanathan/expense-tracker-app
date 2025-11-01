@@ -36,9 +36,7 @@
           class="btn bg-customHsl-text text-white border-none w-fit text-[17px] sm:text-[19px] flex items-center gap-2 px-6 py-3 rounded-md disabled:opacity-50 transition-all hover:bg-opacity-90">
           Create Budget
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20" viewBox="0 0 24 24">
-            <path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 0 1 0-2h6V5a1 1 0 0 1 1-1Z" />
-            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5" />
-          </svg>
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"></path></svg>
         </button>
       </div>
     </app-form-wrapper>
@@ -72,13 +70,11 @@
         </div>
 
         <!-- Add Expense -->
-        <button (click)="addExpense()"
+        <button [disabled]="expenseForm.invalid" (click)="addExpense()"
           class="btn bg-customHsl-text text-white border-none w-fit text-[17px] sm:text-[19px] flex items-center gap-2 px-6 py-3 rounded-md hover:bg-opacity-90 transition-all">
           Add Expense
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20" viewBox="0 0 24 24">
-            <path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 0 1 0-2h6V5a1 1 0 0 1 1-1Z" />
-            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5" />
-          </svg>
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"></path></svg>
         </button>
       </div>
     </app-form-wrapper>
