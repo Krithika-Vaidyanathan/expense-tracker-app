@@ -1,0 +1,7 @@
+nav {
+  @apply sticky top-0 bg-white shadow-sm border-b border-gray-100 z-50;
+}
+
+.logo p {
+  @apply cursor-pointer font-bold tracking-tight;
+}

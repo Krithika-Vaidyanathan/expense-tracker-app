@@ -1,5 +1,5 @@
 <!-- ==========================
-   CREATE ACCOUNT PAGE
+   CREATE ACCOUNT / LOGIN PAGE
    ========================== -->
 <div class="create-account-container flex flex-col lg:flex-row w-full min-h-screen 
             px-6 py-10 lg:py-0 justify-start lg:justify-center items-center">
@@ -9,8 +9,7 @@
     <!-- ==========================
          LEFT SECTION (Form)
     ========================== -->
-    <div [formGroup]="accountForm"
-         class="left-section flex flex-col flex-1 gap-y-4 text-center lg:text-left px-4 md:px-6">
+    <div class="left-section flex flex-col flex-1 gap-y-4 text-center lg:text-left px-4 md:px-6">
 
       <!-- Heading -->
       <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold leading-tight mt-4 md:mt-0">
@@ -20,36 +19,87 @@
 
       <!-- Subtitle -->
       <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-        Take charge of your finances with clarity.<br/> Track, plan, and achieve your goals confidently.
+        Plan, track and achieve your financial goals confidently.
       </p>
 
-      <!-- Input & Button -->
-      <div class="flex flex-col sm:flex-row lg:flex-col gap-4 justify-center lg:justify-start items-center lg:items-start mt-4">
+      <!-- ==========================
+           LOGIN / SIGNUP TOGGLE
+      ========================== -->
+      <div class="flex flex-col gap-4 justify-center lg:justify-start items-center lg:items-start mt-4 w-full sm:w-96 lg:w-full">
 
-        <!-- Account Name Input -->
-        <input
-          formControlName="name"
-          type="text"
-          placeholder="Enter account name"
-          class="input-select w-full sm:w-80 lg:w-full px-4 py-3 border border-gray-300 rounded-lg
-                 focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
-        />
+        <!-- LOGIN FORM -->
+        <div *ngIf="isLoginMode(); else signupBlock" class="w-full">
+          <h2 class="text-2xl font-semibold mb-3 text-gray-800 text-center lg:text-left">Login</h2>
+          <form class="flex flex-col gap-3 w-full">
+            <input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="Email"
+              required
+              class="input-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
+            />
+            <input
+              type="password"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="Password"
+              required
+              class="input-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
+            />
+            <button
+              type="button"
+              (click)="signInWithEmail()"
+              class="btn bg-customHsl-text text-white border-none w-full px-6 py-3 text-[17px] md:text-[19px] rounded-lg flex items-center justify-center hover:bg-opacity-90 transition-all">
+              Sign In
+            </button>
+          </form>
+          <p class="text-sm text-gray-600 mt-3 text-center lg:text-left">
+            Don’t have an account? 
+            <a class="text-customHsl-accent cursor-pointer font-medium" (click)="toggleMode()">Sign Up</a>
+          </p>
+        </div>
 
-        <!-- Create Button -->
-        <button
-          [disabled]="accountForm.invalid"
-          (click)="createAccount()"
-          class="btn bg-customHsl-text text-white border-none w-full sm:w-auto 
-                 px-6 py-3 text-[17px] md:text-[19px] rounded-lg flex items-center justify-center gap-2
-                 hover:bg-opacity-90 disabled:opacity-50 transition-all">
-
-          Create Account
-          <!-- Plus Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg"
-               fill="currentColor" viewBox="0 0 24 24" width="20" height="20"
-               aria-hidden="true">
-            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"></path></svg>
-        </button>
+        <!-- SIGNUP FORM -->
+        <ng-template #signupBlock>
+          <h2 class="text-2xl font-semibold mb-3 text-gray-800 text-center lg:text-left">Create an Account</h2>
+          <form class="flex flex-col gap-3 w-full">
+            <input
+              type="text"
+              [(ngModel)]="name"
+              name="name"
+              placeholder="Full Name"
+              required
+              class="input-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
+            />
+            <input
+              type="email"
+              [(ngModel)]="signupEmail"
+              name="signupEmail"
+              placeholder="Email"
+              required
+              class="input-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
+            />
+            <input
+              type="password"
+              [(ngModel)]="signupPassword"
+              name="signupPassword"
+              placeholder="Password"
+              required
+              class="input-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-customHsl-accent"
+            />
+            <button
+              type="button"
+              (click)="signUp()"
+              class="btn bg-customHsl-text text-white border-none w-full px-6 py-3 text-[17px] md:text-[19px] rounded-lg flex items-center justify-center hover:bg-opacity-90 transition-all">
+              Sign Up
+            </button>
+          </form>
+          <p class="text-sm text-gray-600 mt-3 text-center lg:text-left">
+            Already have an account? 
+            <a class="text-customHsl-accent cursor-pointer font-medium" (click)="toggleMode()">Log In</a>
+          </p>
+        </ng-template>
       </div>
     </div>
 
@@ -63,6 +113,5 @@
         class="w-64 sm:w-80 md:w-[420px] lg:w-[550px] h-auto rounded-2xl object-contain"
       />
     </div>
-
   </div>
 </div>

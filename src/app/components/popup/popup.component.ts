@@ -6,11 +6,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './popup.component.html',
-  styleUrl: './popup.component.scss'
+  styleUrls: ['./popup.component.scss']
 })
 export class PopupComponent {
-  @Input() message: string = '';
   @Input() visible: boolean = false;
+  @Input() title: string = 'Notification';
+  @Input() message: string = '';
+  @Input() type: 'success' | 'error' | 'warning' | 'info' = 'info';
+
   @Output() close = new EventEmitter<void>();
 
   closePopup() {

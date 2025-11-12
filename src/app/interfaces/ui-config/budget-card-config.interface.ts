@@ -1,7 +1,9 @@
+// Used by the BudgetCard component
 export interface BudgetCardConfig {
-    name: string;
-    budget: number;
-    spent: number;
-    color: string;
-    onClick: () => any;
+  id?: string;
+  name: string;
+  budget: number;
+  spent: number;
+  color: string;
+  onClick: () => any;
 }

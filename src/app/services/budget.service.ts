@@ -1,98 +1,118 @@
+// src/app/services/budget.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 import { Budget } from '../interfaces/models/budget.interface';
 import { BudgetCategory } from '../interfaces/models/budget-category.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BudgetService {
+  private budgets$ = new BehaviorSubject<Budget[]>([]);
+  private categories$ = new BehaviorSubject<BudgetCategory[]>([]);
 
-  public BUDGETS: string = 'BUDGETS';
-  public BUDGET_CATEGORIES: string = 'BUDGET_CATEGORIES';
+  constructor(private supabase: SupabaseService) {}
 
-  public budgetSubject: Subject<Budget[]> = new Subject();
-  public budgetCategorySubject: Subject<BudgetCategory[]> = new Subject();
+  /** 🔹 Load all budgets for the logged-in user */
+  async loadBudgetsForUser(userId: string): Promise<void> {
+    try {
+      const { data, error } = await this.supabase
+        .getClient()
+        .from('budgets')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
 
-  constructor() { }
+      if (error) throw error;
 
-  addBudget(budget: Budget) {
-    const budgets = this.getBudgets();
-    budgets.push(budget);
-    this.setBudgets(budgets);
-  }
-
-  getBudgets(): Budget[] {
-    return JSON.parse(localStorage.getItem(this.BUDGETS) || '[]') as Budget[];
-  }
-
-  updateBudgetAmount(budgetId: string, spent: number) {
-    const budgets= this.getBudgets();
-
-    const index = budgets.findIndex(x => x.id === budgetId);
-    if(index > - 1){
-      budgets[index].spent = spent;
-      this.setBudgets(budgets);
-      return;
+      this.budgets$.next(data || []);
+      this.syncBudgetCategories(data || []);
+    } catch (err) {
+      console.error('Error loading budgets:', err);
+      this.budgets$.next([]);
     }
-
-    throw Error('can not update for a budget that does not exist');
   }
 
-  getBudgetCategories(): BudgetCategory[] {
-    return JSON.parse(localStorage.getItem(this.BUDGET_CATEGORIES) || '[]') as BudgetCategory[];
+  /** 🔹 Create a new budget in Supabase */
+  async createBudget(budget: Budget): Promise<void> {
+    try {
+      const { error } = await this.supabase.getClient().from('budgets').insert([budget]);
+      if (error) throw error;
+
+      // Refresh list after insertion
+      await this.loadBudgetsForUser(budget.user_id);
+    } catch (err) {
+      console.error('Error creating budget:', err);
+      throw err;
+    }
   }
 
-  setBudgets(budgets: Budget[]) {
-    localStorage.setItem(this.BUDGETS, JSON.stringify(budgets));
-    const budgetCategories: BudgetCategory[] = budgets.map((item: Budget) => {
-      return {
-        color: item.color,
-        id: item.id,
-        name: item.name
-      } as BudgetCategory
-    })
+  /** 🔹 Delete budget (and cascade delete its expenses) */
+  async deleteBudgetById(budgetId: string): Promise<void> {
+    try {
+      // 1️⃣ Perform delete and confirm the row removed
+      const deleteResp = await this.supabase
+        .getClient()
+        .from('budgets')
+        .delete()
+        .eq('id', budgetId)
+        .select();
 
-    this.setBudgetCategories(budgetCategories);
-    this.budgetSubject.next(budgets);
+      const { error: deleteError } = deleteResp as any;
+      if (deleteError) throw deleteError;
+
+      console.log('✅ Budget deleted (cascade handled by DB):', deleteResp);
+
+      // 2️⃣ Update local budgets (optimistic UI)
+      const remainingBudgets = this.budgets$.value.filter((b) => b.id !== budgetId);
+      this.budgets$.next(remainingBudgets);
+      this.syncBudgetCategories(remainingBudgets);
+
+      // ✅ Cascade deletion handled by Supabase automatically.
+      // We no longer attempt to touch expenses$ here because that belongs to ExpenseService.
+    } catch (err) {
+      console.error('Error deleting budget (cascade):', err);
+      throw err;
+    }
   }
 
-  setBudgetCategories(budgetCategories: BudgetCategory[]) {
-    localStorage.setItem(this.BUDGET_CATEGORIES, JSON.stringify(budgetCategories));
-    this.budgetCategorySubject.next(budgetCategories);
+
+  /** 🔹 Update spent value for a specific budget */
+  async updateBudgetSpent(budgetId: string, spent: number): Promise<void> {
+    try {
+      const { error } = await this.supabase.getClient().from('budgets').update({ spent }).eq('id', budgetId);
+      if (error) throw error;
+
+      // Update local BehaviorSubject (no full reload needed)
+      const updated = this.budgets$.value.map((b) => (b.id === budgetId ? { ...b, spent } : b));
+      this.budgets$.next(updated);
+    } catch (err) {
+      console.error('Error updating budget spent:', err);
+    }
   }
 
-  deleteBudgetById (budgetId: string) {
-    const budgets = this.getBudgets();
-
-    const filtered = budgets.filter((item) => item.id !==  budgetId);
-    this.setBudgets(filtered);
+  /** 🔹 Private helper — derive BudgetCategories from Budgets */
+  private syncBudgetCategories(budgets: Budget[]): void {
+    const categories: BudgetCategory[] = budgets.map((b) => ({
+      id: b.id,
+      name: b.name,
+      color: b.color,
+    }));
+    this.categories$.next(categories);
   }
 
+  /** 🔹 Observable getters */
   getBudgetData(): Observable<Budget[]> {
-    return this.budgetSubject;
+    return this.budgets$.asObservable();
   }
 
   getBudgetCategoryData(): Observable<BudgetCategory[]> {
-    return this.budgetCategorySubject;
+    return this.categories$.asObservable();
   }
 
-  getBudgetById(budgetId: string) {
-    const budgets = this.getBudgets();
-    const index = budgets.findIndex(x => x.id === budgetId);
-    if(index > -1) {
-      return budgets[index];
-    }
-
-    throw Error('Budget does not exist');
-  }
-
-  getBudgetCategoryById(id: string) {
-    const categories = this.getBudgetCategories();
-    const index = categories.findIndex(x => x.id === id);
-    if(index > -1) {
-      return categories[index];
-    }
-    throw Error('Category does not exist');
+  /** 🔹 Utility: Get budget by ID */
+  getBudgetById(budgetId: string): Budget | undefined {
+    return this.budgets$.value.find((b) => b.id === budgetId);
   }
 }

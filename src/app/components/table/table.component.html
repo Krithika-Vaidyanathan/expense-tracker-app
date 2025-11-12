@@ -13,7 +13,7 @@
                 <tr class="row-data amber-opacity">
                     <td class="table-data">{{item.name}}</td>
                     <td class="table-data">{{item.amount}}</td> 
-                    <td class="table-data">{{item.date}}</td>
+                    <td class="table-data">{{ formatDate(item.date) }}</td>
                     <td class="table-data">
                         <div class="btn w-fit {{uiService.generateTailwindClass(item.color, 'bg')}}
                         rounded-3xl text-white border-none">
