@@ -23,8 +23,7 @@ export class NavBarComponent implements OnDestroy {
     // subscribe to router events to detect /create-account
     const routeSub = this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) {
-        // make sure we only hide greeting/logout on create-account route
-        this.isAuthPage = ev.url.includes('/create-account') || ev.url.includes('create-account');
+        this.checkAuthRoute(ev.url);
       }
     });
     this.subs.add(routeSub);
@@ -34,6 +33,11 @@ export class NavBarComponent implements OnDestroy {
       this.user = u;
     });
     this.subs.add(userSub);
+  }
+
+  ngOnInit() {
+    // ✅ Also check current URL on component init (for reload / mobile mode switch)
+    this.checkAuthRoute(this.router.url);
   }
 
   ngOnDestroy() {
@@ -46,5 +50,11 @@ export class NavBarComponent implements OnDestroy {
 
   goHome() {
     this.router.navigateByUrl('/home');
+  }
+
+   private checkAuthRoute(url: string) {
+    this.isAuthPage =
+      url.includes('/create-account') ||
+      url.includes('create-account');
   }
 }
