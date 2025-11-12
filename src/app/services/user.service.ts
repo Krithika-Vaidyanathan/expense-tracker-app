@@ -1,34 +1,78 @@
+// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { v4 as uuidv4 } from 'uuid';
-import { User } from '../interfaces/models/user.interface';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { SupabaseService } from './supabase.service';
+import { User } from '../components/types/user.type';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-  USER: string = 'user';
+  private userSub = new BehaviorSubject<User | null>(null);
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private supabaseService: SupabaseService) {
+    this.initAuthListener();
+  }
 
-  addUser(name : string) {
-    const user: User = {
-      id: uuidv4(),
-      name: name
+  /** Initialize auth listener and try to load current session/user right away */
+  private async initAuthListener() {
+    const client = this.supabaseService.getClient();
+
+    // Try to load current session/user on startup
+    try {
+      const { data: sessionData } = await client.auth.getSession();
+      if (sessionData?.session?.user) {
+        this.setUserFromSupabase(sessionData.session.user);
+      } else {
+        this.userSub.next(null);
+      }
+    } catch (err) {
+      this.userSub.next(null);
     }
-    localStorage.setItem(this.USER, JSON.stringify(user));
+
+    // Listen for future user auth state changes
+    client.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        this.setUserFromSupabase(session.user);
+      } else {
+        this.userSub.next(null);
+      }
+    });
   }
 
-  getUser() : User {
-    return JSON.parse(localStorage.getItem(this.USER) || '{}') as User;
-  }
-  
-  deleteUserAccount() {
-    localStorage.clear();
-    this.router.navigateByUrl('create-account');
+  private setUserFromSupabase(rawUser: any) {
+    const normalized: User = {
+      id: rawUser.id,
+      email: rawUser.email ?? '',
+      phone: rawUser.phone ?? '',
+      user_metadata: {
+        name: rawUser.user_metadata?.displayName ?? '',
+      },
+    };
+    this.userSub.next(normalized);
   }
 
-  isLoggedin() {
-    return Object.keys(this.getUser()).length > 0;
+  /** Observable UI components can subscribe to */
+  get user$(): Observable<User | null> {
+    return this.userSub.asObservable();
+  }
+
+  /** synchronous check — safe because it reads BehaviorSubject current value */
+  isLoggedin(): boolean {
+    return !!this.userSub.value;
+  }
+
+  getUserSync(): User | null {
+    return this.userSub.value;
+  }
+
+  async deleteUserAccount() {
+    // Sign out at backend
+    await this.supabaseService.signOut();
+    // Clear local state
+    this.userSub.next(null);
+    // Redirect to create-account
+    this.router.navigateByUrl('/create-account');
   }
 }

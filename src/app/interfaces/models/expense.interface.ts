@@ -1,9 +1,8 @@
-import { BudgetCategory } from "./budget-category.interface";
-
 export interface Expense {
-    id: string;
-    name: string;
-    budgetCategory: BudgetCategory;
-    amount: number;
-    date: Date;
+  id: string;
+  user_id: string;
+  budget_id: string;
+  name: string;
+  amount: number;
+  created_at: string | Date; // ✅ Supabase timestamp
 }

@@ -1,16 +1,48 @@
 <!-- ==========================
      FOOTER COMPONENT
 ========================== -->
-<footer
-  class="w-full bg-gray-100 text-gray-700 text-center py-4 px-6 mt-12 border-t border-gray-200 flex flex-col sm:flex-row sm:justify-between items-center gap-2 sm:gap-0"
->
+<footer class="w-full bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 
+         text-center py-4 px-6 mt-12 border-t border-gray-200 dark:border-gray-700
+         flex flex-col sm:flex-row sm:justify-between items-center gap-3 transition-colors duration-300">
   <!-- Left: App name / brand -->
-  <p class="text-base sm:text-lg font-semibold">
+ <p class="text-base sm:text-lg font-semibold flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-left">
+  <span class="flex items-center gap-2">
     <span class="text-customHsl-accent">MoneyEase</span> - Plan, Track & Save Smart 💰
-  </p>
+  </span>
 
-  <!-- Right: Copyright -->
-  <p class="text-sm sm:text-base text-gray-600">
-    <span class="text-customHsl-accent">© {{ currentYear }}</span> MoneyEase by KrithikaV. All rights reserved.
-  </p>
+  <!-- LinkedIn Icon -->
+  <a
+    href="https://www.linkedin.com/in/krithika-v-959575179"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Visit Krithika's LinkedIn profile"
+    class="flex items-center justify-center w-9 h-9 sm:w-9 sm:h-9 
+           rounded-full bg-customHsl-accent text-white 
+           hover:bg-white hover:text-black
+           transition-all duration-300 ease-in-out 
+           shadow-md hover:shadow-[0_0_10px_rgba(0,255,200,0.5)] mt-1 sm:mt-0"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+         class="w-5 h-5 sm:w-5 sm:h-5">
+      <path
+        d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 
+           0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM7.09 20H3.56V9h3.53v11zM5.33 
+           7.66c-1.13 0-2.05-.92-2.05-2.05 0-1.13.92-2.05 
+           2.05-2.05s2.05.92 2.05 2.05c0 1.13-.92 2.05-2.05 
+           2.05zm14.67 12.34h-3.53v-5.35c0-1.28-.02-2.93-1.79-2.93-1.79 
+           0-2.06 1.4-2.06 2.84V20h-3.53V9h3.39v1.5h.05c.47-.89 
+           1.62-1.82 3.34-1.82 3.57 0 4.23 2.35 4.23 5.4V20z"
+      />
+    </svg>
+  </a>
+</p>
+
+
+
+  <!-- Right: Copyright + LinkedIn -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+      <span class="text-customHsl-accent">© {{ currentYear }}</span> MoneyEase by KrithikaV. All rights reserved.
+    </p>
+  </div>
 </footer>
