@@ -3,11 +3,12 @@ import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } f
 import { BudgetCardConfig } from '../../interfaces/ui-config/budget-card-config.interface';
 import { CommonModule } from '@angular/common';
 import { UiService } from '../../services/ui.service';
+import { CamelcasePipe } from '../../pipes/camelcase.pipe';
 
 @Component({
   selector: 'app-budget-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CamelcasePipe],
   templateUrl: './budget-card.component.html',
   styleUrl: './budget-card.component.scss',
   // ✅ Use OnPush for performance — updates only when @Input() changes

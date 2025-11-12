@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,16 +17,16 @@ import { BudgetCardComponent } from '../../components/budget-card/budget-card.co
 import { FormWrapperComponent } from '../../components/form-wrapper/form-wrapper.component';
 import { TableComponent } from '../../components/table/table.component';
 import { CommonModule } from '@angular/common';
-
+import { CamelcasePipe } from '../../pipes/camelcase.pipe';
 
 @Component({
   selector: 'app-budget-details',
   standalone: true,
-  imports: [CommonModule, PopupComponent, ReactiveFormsModule, BudgetCardComponent, FormWrapperComponent, TableComponent],
+  imports: [CommonModule, PopupComponent, ReactiveFormsModule, BudgetCardComponent, FormWrapperComponent, TableComponent, CamelcasePipe],
   templateUrl: './budget-details.component.html',
   styleUrl: './budget-details.component.scss',
 })
-export class BudgetDetailsComponent implements OnInit {
+export class BudgetDetailsComponent implements OnInit, OnDestroy {
   budgetCard!: BudgetCardConfig;
   expenseTableData: TableDataConfig[] = [];
   budgetId: string = '';
@@ -71,6 +71,10 @@ export class BudgetDetailsComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  goBack(): void {
+    this.router.navigateByUrl('/home');
   }
 
   /** 🔹 Initialize data for the selected budget */

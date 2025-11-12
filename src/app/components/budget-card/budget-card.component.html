@@ -10,7 +10,7 @@
              text-center sm:text-left gap-y-1 sm:gap-y-0"
     >
       <p class="text-xl sm:text-2xl {{ textColor }} font-bold break-words truncate">
-        {{ config.name }}
+        {{ config.name | camelcase }}
       </p>
       <p class="text-lg sm:text-xl {{ textColor }} font-semibold whitespace-nowrap">
         {{ config.budget | currency: '$ ' }}

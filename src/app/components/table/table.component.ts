@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableDataConfig } from '../../interfaces/models/table-data-config.interface';
 import { UiService } from '../../services/ui.service';
+import { CamelcasePipe } from '../../pipes/camelcase.pipe';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [],
+  imports: [CamelcasePipe],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss'
 })
