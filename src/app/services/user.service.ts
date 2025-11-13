@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SupabaseService } from './supabase.service';
 import { User } from '../components/types/user.type';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -73,6 +74,41 @@ export class UserService {
     // Clear local state
     this.userSub.next(null);
     // Redirect to create-account
+    this.router.navigateByUrl('/create-account');
+  }
+
+  async deleteUserCompletely() {
+    const client = this.supabaseService.getClient();
+    const user = this.getUserSync();
+    if (!user) return;
+
+    const userId = user.id;
+
+    // Build edge function URL
+    const url = `${environment.supabaseUrl}/functions/v1/delete-user`;
+
+    // Call edge function
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Pass anon key (allowed for Edge Function access)
+        "Authorization": `Bearer ${environment.supabaseAnonKey}`
+      },
+      body: JSON.stringify({ userId })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Failed to delete user");
+    }
+
+    // Logout locally
+    await this.supabaseService.signOut();
+    this.userSub.next(null);
+
+    // Redirect
     this.router.navigateByUrl('/create-account');
   }
 }

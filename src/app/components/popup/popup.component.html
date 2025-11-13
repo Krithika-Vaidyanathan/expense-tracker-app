@@ -28,14 +28,23 @@
 
     <!-- Message -->
     <p class="text-gray-700">{{ message }}</p>
-
-    <!-- Close Button -->
+    
+    <!-- ACTION BUTTONS -->
     <div class="flex justify-center mt-6">
-      <button 
-        class="px-5 py-2 bg-customHsl-text text-white rounded-md hover:opacity-90 transition"
+    
+      <!-- YES BUTTON when confirmMode is true -->
+      <button *ngIf="confirmMode" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+        (click)="confirm.emit()">
+        Yes
+      </button>
+    
+      <!-- CLOSE BUTTON when confirmMode is false -->
+      <button *ngIf="!confirmMode" class="px-5 py-2 bg-customHsl-text text-white rounded-md hover:opacity-90 transition"
         (click)="closePopup()">
         Close
       </button>
+    
     </div>
-  </div>
-</div>
+    
+    </div>
+    </div>

@@ -13,9 +13,10 @@ export class PopupComponent {
   @Input() title: string = 'Notification';
   @Input() message: string = '';
   @Input() type: 'success' | 'error' | 'warning' | 'info' = 'info';
-
+  @Input() confirmMode: boolean = false;
   @Output() close = new EventEmitter<void>();
-
+  @Output() confirm = new EventEmitter<void>();
+  
   closePopup() {
     this.close.emit();
   }

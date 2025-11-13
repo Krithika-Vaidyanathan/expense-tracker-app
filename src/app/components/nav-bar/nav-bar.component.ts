@@ -5,17 +5,21 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { User } from '../../components/types/user.type';
+import { PopupComponent } from '../popup/popup.component';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PopupComponent],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.scss'
 })
 export class NavBarComponent implements OnDestroy {
   user: User | null = null;
   isAuthPage = false;
+  showDeletePopup = false;
+  deletePopupMessage = '';
+  showMenu = false;
 
   private subs = new Subscription();
 
@@ -42,6 +46,23 @@ export class NavBarComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  confirmDeleteUser() {
+    this.deletePopupMessage =
+      'This action will permanently delete your account, budgets, and expenses. Are you sure?';
+    this.showDeletePopup = true;
+  }
+
+  async deleteUserPermanently() {
+    try {
+      await this.userService.deleteUserCompletely();  // NEW service method
+    } catch (err) {
+      console.error('Account deletion failed:', err);
+    } finally {
+      console.log("User account deleted successfully...");
+      this.showDeletePopup = false;
+    }
   }
 
   async logout() {

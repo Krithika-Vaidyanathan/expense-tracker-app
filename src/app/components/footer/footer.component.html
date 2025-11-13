@@ -5,41 +5,73 @@
          text-center py-4 px-6 mt-12 border-t border-gray-200 dark:border-gray-700
          flex flex-col sm:flex-row sm:justify-between items-center gap-3 transition-colors duration-300">
   <!-- Left: App name / brand -->
- <p class="text-base sm:text-lg font-semibold flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-left">
-  <span class="flex items-center gap-2">
+  <p
+  class="text-base sm:text-lg font-semibold flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 text-center sm:text-left">
+  <span class="flex flex-col sm:flex-row items-center gap-3">
     <span class="text-customHsl-accent">WealthyWay</span> - Plan, Track & Save Smart 💰
   </span>
 
-  <!-- LinkedIn Icon -->
-  <a
-    href="https://www.linkedin.com/in/krithika-v-959575179"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Visit Krithika's LinkedIn profile"
-    class="flex items-center justify-center w-9 h-9 sm:w-9 sm:h-9 
-           rounded-full bg-customHsl-accent text-white 
-           hover:bg-white hover:text-black
-           transition-all duration-300 ease-in-out 
-           shadow-md hover:shadow-[0_0_10px_rgba(0,255,200,0.5)] mt-1 sm:mt-0"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-         class="w-5 h-5 sm:w-5 sm:h-5">
-      <path
-        d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 
-           0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM7.09 20H3.56V9h3.53v11zM5.33 
-           7.66c-1.13 0-2.05-.92-2.05-2.05 0-1.13.92-2.05 
-           2.05-2.05s2.05.92 2.05 2.05c0 1.13-.92 2.05-2.05 
-           2.05zm14.67 12.34h-3.53v-5.35c0-1.28-.02-2.93-1.79-2.93-1.79 
-           0-2.06 1.4-2.06 2.84V20h-3.53V9h3.39v1.5h.05c.47-.89 
-           1.62-1.82 3.34-1.82 3.57 0 4.23 2.35 4.23 5.4V20z"
-      />
-    </svg>
-  </a>
+  <!-- ICONS in a single row for all screen sizes -->
+  <span class="flex flex-row items-center justify-center gap-2 mt-2 sm:mt-0">
+    <!-- LinkedIn Icon -->
+    <a href="https://www.linkedin.com/in/krithika-v-959575179" target="_blank" rel="noopener noreferrer"
+      aria-label="Visit Krithika's LinkedIn profile"
+      class="flex items-center justify-center w-9 h-9 sm:w-9 sm:h-9 
+             rounded-full bg-customHsl-accent text-white 
+             hover:bg-white hover:text-black
+             transition-all duration-300 ease-in-out 
+             shadow-md hover:shadow-[0_0_10px_rgba(0,255,200,0.5)]">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+        <path
+          d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 
+             2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM7.09 20H3.56V9h3.53v11zM5.33 
+             7.66c-1.13 0-2.05-.92-2.05-2.05 0-1.13.92-2.05 
+             2.05-2.05s2.05.92 2.05 2.05c0 1.13-.92 2.05-2.05 
+             2.05zm14.67 12.34h-3.53v-5.35c0-1.28-.02-2.93-1.79-2.93-1.79 
+             0-2.06 1.4-2.06 2.84V20h-3.53V9h3.39v1.5h.05c.47-.89 
+             1.62-1.82 3.34-1.82 3.57 0 4.23 2.35 4.23 5.4V20z" />
+      </svg>
+    </a>
+
+    <!-- GitHub Icon -->
+    <a href="https://github.com/Krithika-Vaidyanathan" target="_blank" rel="noopener noreferrer"
+      aria-label="Visit Krithika's GitHub profile"
+      class="flex items-center justify-center w-9 h-9 
+             rounded-full bg-customHsl-accent text-white 
+             hover:bg-white hover:text-black
+             transition-all duration-300 ease-in-out 
+             shadow-md hover:shadow-[0_0_10px_rgba(0,255,200,0.5)]">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+        <path
+          d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.41 7.86 10.94.58.11.79-.25.79-.56
+             0-.28-.01-1.02-.02-2.01-3.2.7-3.88-1.54-3.88-1.54-.53-1.35-1.3-1.71-1.3-1.71-1.06-.72.08-.7.08-.7
+             1.17.08 1.78 1.21 1.78 1.21 1.04 1.78 2.74 1.26 3.41.96.11-.76.41-1.26.74-1.55-2.55-.29-5.23-1.28-5.23-5.7
+             0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39
+             2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09
+             0 4.43-2.69 5.41-5.25 5.69.42.37.8 1.1.8 2.22 0 1.6-.02 2.89-.02 3.28
+             0 .31.21.68.8.56C20.71 21.41 24 17.09 24 12c0-6.35-5.15-11.5-12-11.5z" />
+      </svg>
+    </a>
+
+    <!-- Email Icon -->
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=krithikavaidyanathan13@gmail.com" target="_blank"
+      rel="noopener noreferrer" aria-label="Send an email to Krithika"
+      class="flex items-center justify-center w-9 h-9 
+             rounded-full bg-customHsl-accent text-white 
+             hover:bg-white hover:text-black
+             transition-all duration-300 ease-in-out 
+             shadow-md hover:shadow-[0_0_10px_rgba(0,255,200,0.5)]">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+        <path
+          d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 
+         2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 
+         4-8 5-8-5V6l8 5 8-5v2z" />
+      </svg>
+    </a>
+  </span>
 </p>
 
-
-
-  <!-- Right: Copyright + LinkedIn -->
+  <!-- Right: Copyright -->
   <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
     <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
       <span class="text-customHsl-accent">© {{ currentYear }}</span> WealthyWay by KrithikaV. All rights reserved.
