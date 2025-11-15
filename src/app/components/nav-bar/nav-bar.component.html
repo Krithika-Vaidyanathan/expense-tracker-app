@@ -4,30 +4,36 @@
 
   <!-- Logo Section -->
   <div (click)="goHome()" class="logo cursor-pointer flex items-center gap-x-3">
-    <img
-      class="object-contain w-28 sm:w-32 md:w-[12.2rem] h-auto max-w-[12.2rem]"
-      src="assets/wealthyway-logo.png"
-      alt="WealthyWay Logo"
-    />
+    <img class="object-contain w-28 sm:w-32 md:w-[12.2rem] h-auto max-w-[12.2rem]" src="assets/wealthyway-logo.png"
+      alt="WealthyWay Logo" />
   </div>
-
   <!-- Right Section -->
   <div class="flex items-center gap-4" *ngIf="!isAuthPage && user">
 
-    <!-- Greeting (desktop only) -->
-    <p class="hidden sm:block text-base md:text-lg text-gray-700 font-medium">
+    <!-- Mobile: first name only -->
+    <p class="text-base text-gray-700 font-medium flex items-center gap-1 sm:hidden">
       Hi,
       <span class="text-customHsl-accent font-semibold">
-        {{ user.user_metadata.name || user.email }}
+        {{ (user?.user_metadata?.name || user.email || '').split(' ')[0] }}
       </span> 👋
     </p>
+
+    <!-- Tablet/Desktop: full name -->
+    <p class="hidden sm:flex text-base md:text-lg text-gray-700 font-medium items-center gap-1">
+      Hi,
+      <span class="text-customHsl-accent font-semibold">
+        {{ user?.user_metadata?.name || user.email }}
+      </span> 👋
+    </p>
+
+
+
 
     <!-- UNIVERSAL SNACKBAR MENU ICON -->
     <div class="relative">
 
       <!-- Snackbar Icon -->
-      <button (click)="showMenu = !showMenu"
-        class="w-10 h-10 bg-customHsl-accent hover:brightness-110 text-white rounded-md shadow-sm 
+      <button (click)="showMenu = !showMenu" class="w-10 h-10 bg-customHsl-accent hover:brightness-110 text-white rounded-md shadow-sm 
                transition flex justify-center items-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
@@ -38,9 +44,7 @@
       </button>
 
       <!-- CLICK OUTSIDE OVERLAY -->
-      <div *ngIf="showMenu"
-        (click)="showMenu = false"
-        class="fixed inset-0 z-40 bg-black/20">
+      <div *ngIf="showMenu" (click)="showMenu = false" class="fixed inset-0 z-40 bg-black/20">
       </div>
 
       <!-- DROPDOWN MENU -->
@@ -56,11 +60,8 @@
           </span>
 
           <!-- Feedback Icon -->
-          <img 
-            src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png"
-            alt="Feedback Icon"
-            class="w-5 h-5 object-contain"
-          />
+          <img src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png" alt="Feedback Icon"
+            class="w-5 h-5 object-contain" />
         </button>
 
         <!-- LOGOUT -->
@@ -72,11 +73,8 @@
           </span>
 
           <!-- Logout Icon -->
-          <img 
-            src="https://cdn-icons-png.flaticon.com/512/5509/5509651.png"
-            alt="Logout Icon"
-            class="w-5 h-5 object-contain"
-          />
+          <img src="https://cdn-icons-png.flaticon.com/512/5509/5509651.png" alt="Logout Icon"
+            class="w-5 h-5 object-contain" />
         </button>
 
         <!-- DELETE ACCOUNT -->
@@ -87,10 +85,8 @@
             Delete Account
           </span>
 
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-            width="18" height="18">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 
                  0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 
                  0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 
                  6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 
@@ -108,25 +104,27 @@
 </nav>
 
 <!-- Popup -->
-<app-popup 
-  [visible]="showDeletePopup"
-  [message]="deletePopupMessage"
-  [confirmMode]="true"
-  (confirm)="deleteUserPermanently()"
-  (close)="showDeletePopup = false">
+<app-popup [visible]="showDeletePopup" [message]="deletePopupMessage" [confirmMode]="true"
+  (confirm)="deleteUserPermanently()" (close)="showDeletePopup = false">
 </app-popup>
 
 <!-- FEEDBACK DIALOG COMPONENT (ALWAYS KEEP AT ROOT LEVEL) -->
-<app-feedback-dialog
-  [visible]="showFeedbackModal"
-  (close)="showFeedbackModal = false">
+<app-feedback-dialog [visible]="showFeedbackModal" (close)="showFeedbackModal = false">
 </app-feedback-dialog>
 
 <style>
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
+
   .animate-fadeIn {
     animation: fadeIn 0.15s ease-out;
   }
