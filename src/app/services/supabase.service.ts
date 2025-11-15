@@ -36,7 +36,6 @@ export class SupabaseService {
       password: payload.password,
       options: {
         data: { displayName: payload.name },
-        // emailRedirectTo: window.location.origin, // redirect link after verification
       },
     });
   }
@@ -48,4 +47,25 @@ export class SupabaseService {
   async signOut() {
     return await this.supabase.auth.signOut();
   }
+
+  async submitFeedback(message: string) {
+    const {
+      data: { user },
+      error: userError
+    } = await this.supabase.auth.getUser();
+
+    if (userError) return { error: userError };
+    if (!user) return { error: { message: 'User not authenticated' } };
+
+    const { error } = await this.supabase
+      .from('feedback')
+      .insert({
+        user_id: user.id,
+        email: user.email,
+        message: message
+      });
+
+    return { error };
+  }
+
 }

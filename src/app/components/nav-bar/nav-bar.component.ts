@@ -6,11 +6,12 @@ import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { User } from '../../components/types/user.type';
 import { PopupComponent } from '../popup/popup.component';
+import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [CommonModule, PopupComponent],
+  imports: [CommonModule, PopupComponent, FeedbackDialogComponent],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.scss'
 })
@@ -20,6 +21,7 @@ export class NavBarComponent implements OnDestroy {
   showDeletePopup = false;
   deletePopupMessage = '';
   showMenu = false;
+  showFeedbackModal = false;
 
   private subs = new Subscription();
 
@@ -73,9 +75,13 @@ export class NavBarComponent implements OnDestroy {
     this.router.navigateByUrl('/home');
   }
 
-   private checkAuthRoute(url: string) {
+  private checkAuthRoute(url: string) {
     this.isAuthPage =
       url.includes('/create-account') ||
       url.includes('create-account');
+  }
+
+  openFeedbackModal() {
+    this.showFeedbackModal = true;
   }
 }
